@@ -3,20 +3,20 @@ version: '3.8'
 services:
   db:
     image: postgres:15
-    container_name: odoo16-db
+    container_name: odoo16-db-git
     restart: always
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
     volumes:
-      - odoo16_db_data:/var/lib/postgresql/data
+      - odoo16_db_data-git:/var/lib/postgresql/data
     networks:
-      - odoo16-net
+      - odoo16-git-net
 
   odoo:
     image: odoo:16
-    container_name: odoo16
+    container_name: odoo16-git
     restart: always
     user: "0:0"
     depends_on:
@@ -27,12 +27,12 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      - odoo16_web_data:/var/lib/odoo
+      - odoo16_web_data-git:/var/lib/odoo
       - /opt/odoo/odoo16/conf/odoo.conf:/etc/odoo/odoo.conf
       - /opt/odoo/odoo16/extra-addons:/mnt/extra-addons
       - /opt/odoo/odoo16/filestore:/root/.local/share/Odoo/filestore
     networks:
-      - odoo16-net
+      - odoo16-git-net
       - traefik
     labels:
       - "traefik.enable=true"
@@ -43,11 +43,11 @@ services:
       - "traefik.http.services.odoo16.loadbalancer.server.port=8069"
 
 volumes:
-  odoo16_db_data:
-  odoo16_web_data:
+  odoo16_db_data-git:
+  odoo16_web_data-git:
 
 networks:
-  odoo16-net:
+  odoo16-git-net:
     driver: bridge
   traefik:
     external: true
